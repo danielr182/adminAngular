@@ -13,10 +13,12 @@ import { APP_ROUTES } from './app.routes';
 
 // Módulos
 import { PagesModule } from './pages/pages.module';
+import { FormsModule } from '@angular/forms';
 
 // Servicios
 import { SharedService } from './services/shared.service';
 import { SidebarService } from './services/sidebar.service';
+
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { SidebarService } from './services/sidebar.service';
   imports: [
     BrowserModule,
     PagesModule,
+    FormsModule,
     APP_ROUTES
   ],
   providers: [SharedService, SidebarService],
