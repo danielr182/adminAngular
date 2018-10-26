@@ -15,10 +15,6 @@ import { APP_ROUTES } from './app.routes';
 import { PagesModule } from './pages/pages.module';
 import { FormsModule } from '@angular/forms';
 
-// Servicios
-import { SharedService } from './services/shared.service';
-import { SidebarService } from './services/sidebar.service';
-
 
 @NgModule({
   declarations: [
@@ -33,7 +29,7 @@ import { SidebarService } from './services/sidebar.service';
     FormsModule,
     APP_ROUTES
   ],
-  providers: [SharedService, SidebarService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
