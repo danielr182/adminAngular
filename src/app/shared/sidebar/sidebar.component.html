@@ -10,7 +10,7 @@
                 <li class="user-profile">
                     <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img src="../assets/images/users/profile.png" alt="user" /><span class="hide-menu">Steave Jobs </span></a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a routerLinkActive="active" routerLink="/">My Profile </a></li>
+                        <li><a routerLinkActive="active" routerLink="/">My Profiley </a></li>
                         <li><a routerLinkActive="active" routerLink="/">My Balance</a></li>
                         <li><a routerLinkActive="active" routerLink="/">Inbox</a></li>
                         <li><a routerLinkActive="active" routerLink="/account-settings">Account Setting</a></li>
@@ -20,8 +20,10 @@
                 <li class="nav-devider"></li>
                 <li class="nav-small-cap">PERSONAL</li>
                 <li *ngFor="let menu of _sidebar.menu"> <a class="has-arrow waves-effect waves-dark" aria-expanded="false"><i [class]="menu.icono"></i><span class="hide-menu">{{ menu.titulo }} <span class="label label-rouded label-themecolor pull-right">{{ menu.submenu.length}}</span></span></a>
-                    <ul *ngFor="let submenu of menu.submenu" aria-expanded="false" class="collapse">
-                        <li><a routerLinkActive="active" [routerLink]="[submenu.url]">{{ submenu.titulo }} </a></li>
+                    <ul aria-expanded="false" class="collapse">
+                        <li *ngFor="let submenu of menu.submenu">
+                            <a routerLinkActive="active" [routerLink]="[submenu.url]">{{ submenu.titulo }} </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
