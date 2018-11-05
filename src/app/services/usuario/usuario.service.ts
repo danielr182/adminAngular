@@ -6,6 +6,7 @@ import swal from 'sweetalert';
 import { ServiceModule } from '../service.module';
 import { map } from 'rxjs/operators';
 import { Usuario } from '../../models/usuario.model';
+import { SubirArchivoService } from './../subir-archivo/subir-archivo.service';
 import { URL_SERVICIOS } from '../../config/config';
 
 @Injectable({
@@ -16,7 +17,7 @@ export class UsuarioService {
   usuario: Usuario;
   token: string;
 
-  constructor( public _http: HttpClient, public router: Router) {
+  constructor( public _http: HttpClient, public router: Router, public _subirArchivoService: SubirArchivoService) {
     this.cargarLocalStorage();
    }
 
@@ -84,6 +85,29 @@ export class UsuarioService {
         return true;
       })
     );
+  }
+
+  actualizarUsuario(usuario: Usuario) {
+    const url = URL_SERVICIOS + '/usuario/' + usuario._id + '?token=' + this.token;
+    return this._http.put( url, usuario).pipe(
+      map( (resp: any) => {
+        this.guardarLocalStorage( this.token, resp.usuario);
+        swal('Usuario actualizado', usuario.nombre, 'success');
+        return true;
+      })
+    );
+  }
+
+  actualizarImagen( archivo: File, id: string) {
+    this._subirArchivoService.subirArchivo( archivo, 'usuarios', id)
+        .then( (resp: any) => {
+          this.usuario.img = resp.usuario.img;
+          swal('Imagen Actualizada', this.usuario.nombre, 'success');
+          this.guardarLocalStorage(this.token, resp.usuario);
+        })
+        .catch(resp => {
+          console.log( resp );
+        });
   }
 
 }
