@@ -5,7 +5,7 @@ import { ServiceModule } from '../service.module';
 import { SubirArchivoService } from '../../services/subir-archivo/subir-archivo.service';
 import { URL_SERVICIOS } from '../../config/config';
 import { Medico } from '../../models/medico.model';
-import { UsuarioService } from '../../services/service.index';
+import { UsuarioService } from '../../services/usuario/usuario.service';
 
 @Injectable({
   providedIn: ServiceModule
