@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ServiceModule } from '../service.module';
 import { SubirArchivoService } from '../../services/subir-archivo/subir-archivo.service';
-import { URL_SERVICIOS } from '../../config/config';
 import { Medico } from '../../models/medico.model';
 import { UsuarioService } from '../../services/usuario/usuario.service';
+import { URL_SERVICIOS } from '../../config/config';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: ServiceModule
@@ -50,7 +51,7 @@ export class MedicoService {
     const url = URL_SERVICIOS + '/medico/' + id + '?token=' + this._usuarioService.token;
     return this._http.delete(url).pipe(
       map( (res: any) => {
-        swal('Médico Borrado', 'El médico ha sido eliminado correctamente', 'success');
+        Swal.fire('Médico Borrado', 'El médico ha sido eliminado correctamente', 'success');
         return true;
       })
     );
@@ -64,7 +65,7 @@ export class MedicoService {
       url += '?token=' + this._usuarioService.token;
       return this._http.put(url, medico).pipe(
         map( (res: any) => {
-          swal('Médico Actualizado', medico.nombre , 'success');
+          Swal.fire('Médico Actualizado', medico.nombre , 'success');
           return res.medico;
         })
       );
@@ -73,7 +74,7 @@ export class MedicoService {
       url += '?token=' + this._usuarioService.token;
       return this._http.post(url, medico).pipe(
         map( (res: any) => {
-          swal('Médico Creado', medico.nombre , 'success');
+          Swal.fire('Médico Creado', medico.nombre , 'success');
           return res.medico;
         })
       );

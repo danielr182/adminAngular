@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { URL_SERVICIOS } from '../../config/config';
 import { Usuario } from '../../models/usuario.model';
 import { Medico } from '../../models/medico.model';
 import { Hospital } from '../../models/hospital.model';
+import { URL_SERVICIOS } from '../../config/config';
 
 @Component({
   selector: 'app-busqueda',
@@ -36,13 +36,4 @@ export class BusquedaComponent implements OnInit {
       this.hospitales = resp.hospitales;
     });
   }
-
-  irA(tipo, id) {
-    if (id) {
-      this._router.navigate([tipo, id]);
-    } else {
-      this._router.navigate([tipo]);
-    }
-  }
-
 }

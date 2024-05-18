@@ -4,26 +4,23 @@ import { map } from 'rxjs/operators';
 
 import { ServiceModule } from '../service.module';
 import { SubirArchivoService } from '../../services/subir-archivo/subir-archivo.service';
-import { URL_SERVICIOS } from '../../config/config';
 import { Hospital } from '../../models/hospital.model';
+import { URL_SERVICIOS } from '../../config/config';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: ServiceModule
 })
 export class HospitalService {
 
-  token: string;
+  token!: string;
 
   constructor( public _http: HttpClient, public _subirArchivoService: SubirArchivoService ) {
     this.cargarLocalStorage();
   }
 
   cargarLocalStorage() {
-    if ( localStorage.getItem('token') ) {
-      this.token = localStorage.getItem('token');
-    } else {
-      this.token = '';
-    }
+    this.token = localStorage.getItem('token') ?? '';
   }
 
   cargarHospitales( desde: number = 0 ) {
@@ -53,7 +50,7 @@ export class HospitalService {
     const url = URL_SERVICIOS + '/hospital?token=' + this.token;
     return this._http.post(url, hospital).pipe(
       map( (res: any) => {
-        swal('Hospital Creado', 'El hospital ha sido creado correctamente', 'success');
+        Swal.fire('Hospital Creado', 'El hospital ha sido creado correctamente', 'success');
         return true;
       })
     );
@@ -63,7 +60,7 @@ export class HospitalService {
     const url = URL_SERVICIOS + '/hospital/' + hospital._id + '?token=' + this.token;
     return this._http.put( url, hospital).pipe(
       map( (resp: any) => {
-        swal('Hospital actualizado', hospital.nombre, 'success');
+        Swal.fire('Hospital actualizado', hospital.nombre, 'success');
         return true;
       })
     );
@@ -73,7 +70,7 @@ export class HospitalService {
     const url = URL_SERVICIOS + '/hospital/' + id + '?token=' + this.token;
     return this._http.delete(url).pipe(
       map( (res: any) => {
-        swal('Hospital Borrado', 'El hospital ha sido eliminado correctamente', 'success');
+        Swal.fire('Hospital Borrado', 'El hospital ha sido eliminado correctamente', 'success');
         return true;
       })
     );

@@ -1,14 +1,4 @@
-/*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-
 @import '../variable';
-
-
-
 
 /*******************
 Table Cell
@@ -60,9 +50,6 @@ Table Cell
         vertical-align: middle;
     }
 }
-
-
-
 
 /*******************
 Table-Layout
@@ -368,9 +355,6 @@ Table-Layout
     }
 }
 
-
-
-
 /*******************
 Table-Data Table
 ******************/
@@ -527,10 +511,6 @@ table.dataTable thead .sorting:after {
     padding: 0 1em
 }
 
-
-
-
-
 /*******************
 Table- responsive
 ******************/
@@ -538,9 +518,6 @@ Table- responsive
 .tablesaw-bar .btn-group label {
     color: $bodytext!important;
 }
-
-
-
 
 /*******************
 Table- editable table

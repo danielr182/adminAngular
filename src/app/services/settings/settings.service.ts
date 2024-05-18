@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
-
 import { ServiceModule } from '../service.module';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: ServiceModule
@@ -14,7 +13,7 @@ export class SettingsService {
     tema: 'default'
   };
 
-  constructor(@Inject( DOCUMENT ) private _document) {
+  constructor(@Inject( DOCUMENT ) private _document: Document) {
     this.cargarAjustes();
    }
 
@@ -24,13 +23,13 @@ export class SettingsService {
 
   cargarAjustes() {
     if (localStorage.getItem('ajustes')) {
-      this.ajustes = JSON.parse(localStorage.getItem('ajustes'));
+      this.ajustes = JSON.parse(localStorage.getItem('ajustes') ?? '');
     }
     this.aplicarTema(this.ajustes.tema, this.ajustes.temaUrl);
   }
 
   aplicarTema(tema: string, url: string) {
-    this._document.getElementById('tema').setAttribute('href', url);
+    this._document.getElementById('tema')?.setAttribute('href', url);
     this.ajustes.tema = tema;
     this.ajustes.temaUrl = url;
     this.guardarAjustes();

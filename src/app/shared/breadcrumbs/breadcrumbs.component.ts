@@ -10,11 +10,11 @@ import { filter, map } from 'rxjs/operators';
 })
 export class BreadcrumbsComponent implements OnInit {
 
-  titulo: string;
+  titulo!: string;
   constructor( private _router: Router, private _title: Title, private _meta: Meta) {
 
     this.getDataRoute().subscribe( event => {
-      this.titulo = event.titulo;
+      this.titulo = event['titulo'];
       this._title.setTitle(this.titulo);
       const metaTag: MetaDefinition = {
         name: 'decription',
@@ -30,7 +30,7 @@ export class BreadcrumbsComponent implements OnInit {
   getDataRoute() {
     return this._router.events
     .pipe(
-      filter( (evento: ActivationEnd) => {
+      filter( (evento: any) => {
         return evento instanceof ActivationEnd && evento.snapshot.firstChild === null;
       }),
       map( (evento: ActivationEnd) => evento.snapshot.data)

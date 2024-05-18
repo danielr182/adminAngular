@@ -6,8 +6,8 @@ import { ServiceModule } from '../../services/service.module';
 })
 export class ModalUploadService {
 
-  public tipo: string;
-  public id: string;
+  public tipo!: string | null;
+  public id!: string | null;
   public oculto: string = 'oculto';
   public notificacion = new EventEmitter<any>();
 

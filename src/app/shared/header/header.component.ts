@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  usuario: Usuario;
+  usuario!: Usuario | null;
 
   constructor( public _usuarioService: UsuarioService, public _router: Router) { }
 

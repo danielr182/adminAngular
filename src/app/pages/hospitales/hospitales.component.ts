@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HospitalService } from '../../services/hospital/hospital.service';
 import { Hospital } from '../../models/hospital.model';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
-declare var swal: any;
 
 @Component({
   selector: 'app-hospitales',
@@ -65,10 +65,12 @@ export class HospitalesComponent implements OnInit {
   }
 
   crearHospital() {
-    swal('Nombre Nuevo Hospital', {
-      content: 'input',
+    Swal.fire({
+      input: 'text',
+      title: 'Nombre Nuevo Hospital',
     })
-    .then((nombre: string) => {
+    .then((result: SweetAlertResult<string>) => {
+      const nombre = result.value;
       if (nombre != null && nombre.length > 0) {
         const hospital: Hospital = new Hospital( nombre );
         this._hospitalService.crearHospital( hospital )
@@ -86,16 +88,15 @@ export class HospitalesComponent implements OnInit {
 
   borrarHospital( hospital: Hospital ) {
 
-    swal({
+    Swal.fire({
       title: 'Está seguro?',
       text: 'Esta a punto de borrar a ' + hospital.nombre,
       icon: 'warning',
-      buttons: true,
-      dangerMode: true,
+      showCancelButton: true,
     })
-    .then((willDelete) => {
-      if (willDelete) {
-        this._hospitalService.borrarHospital( hospital._id )
+    .then((result: SweetAlertResult<void>) => {
+      if (result.isConfirmed) {
+        this._hospitalService.borrarHospital( hospital._id ?? '' )
             .subscribe( resp => {
               this.cargarHospitales();
             });

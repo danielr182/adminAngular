@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ServiceModule } from '../service.module';
-import { URL_SERVICIOS } from './../../config/config';
+import { URL_SERVICIOS } from '../../config/config';
 
 @Injectable({
   providedIn: ServiceModule

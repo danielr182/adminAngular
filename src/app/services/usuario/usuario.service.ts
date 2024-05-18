@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 import { ServiceModule } from '../service.module';
 import { map, catchError } from 'rxjs/operators';
@@ -15,9 +15,9 @@ import { URL_SERVICIOS } from '../../config/config';
 })
 export class UsuarioService {
 
-  usuario: Usuario;
-  token: string;
-  menu: any[];
+  usuario!: Usuario | null;
+  token!: string;
+  menu!: any[];
 
   constructor( public _http: HttpClient, public router: Router, public _subirArchivoService: SubirArchivoService) {
     this.cargarLocalStorage();
@@ -28,10 +28,11 @@ export class UsuarioService {
   }
 
   cargarLocalStorage() {
-    if ( localStorage.getItem('token') ) {
-      this.token = localStorage.getItem('token');
-      this.usuario = JSON.parse( localStorage.getItem('usuario') );
-      this.menu = JSON.parse( localStorage.getItem('menu') );
+    const localToken = localStorage.getItem('token');
+    if ( localToken ) {
+      this.token = localToken;
+      this.usuario = JSON.parse( localStorage.getItem('usuario') ?? '');
+      this.menu = JSON.parse( localStorage.getItem('menu') ?? '' );
     } else {
       this.token = '';
       this.usuario = null;
@@ -40,7 +41,7 @@ export class UsuarioService {
   }
 
   guardarLocalStorage(token: string, usuario: Usuario, menu: any[]) {
-    localStorage.setItem('id', usuario._id);
+    localStorage.setItem('id', usuario._id ?? '');
     localStorage.setItem('token', token);
     localStorage.setItem('usuario', JSON.stringify(usuario));
     localStorage.setItem('menu', JSON.stringify(menu));
@@ -53,11 +54,11 @@ export class UsuarioService {
     const url = URL_SERVICIOS + '/usuario';
     return this._http.post( url, usuario ).pipe(
       map( (resp: any) => {
-        swal('Usuario creado', usuario.email, 'success');
+        Swal.fire('Usuario creado', usuario.email, 'success');
         return resp.usuario;
       }),
       catchError(err => {
-        swal(err.error.mensaje, err.error.errors.message, 'error');
+        Swal.fire(err.error.mensaje, err.error.errors.message, 'error');
         return throwError(err);
       })
     );
@@ -97,7 +98,7 @@ export class UsuarioService {
         return true;
       }),
       catchError(err => {
-        swal('Error en login', err.error.mensaje, 'error');
+        Swal.fire('Error en login', err.error.mensaje, 'error');
         return throwError(err);
       })
     );
@@ -107,14 +108,14 @@ export class UsuarioService {
     const url = URL_SERVICIOS + '/usuario/' + usuario._id + '?token=' + this.token;
     return this._http.put( url, usuario).pipe(
       map( (resp: any) => {
-        if (usuario._id === this.usuario._id) {
+        if (usuario._id === this.usuario?._id) {
           this.guardarLocalStorage( this.token, resp.usuario, this.menu);
         }
-        swal('Usuario actualizado', usuario.nombre, 'success');
+        Swal.fire('Usuario actualizado', usuario.nombre, 'success');
         return true;
       }),
       catchError(err => {
-        swal(err.error.mensaje, err.error.errors.message, 'error');
+        Swal.fire(err.error.mensaje, err.error.errors.message, 'error');
         return throwError(err);
       })
     );
@@ -123,8 +124,9 @@ export class UsuarioService {
   actualizarImagen( archivo: File, id: string ) {
     this._subirArchivoService.subirArchivo( archivo, 'usuarios', id)
         .then( (resp: any) => {
+          if (!this.usuario) return;
           this.usuario.img = resp.usuario.img;
-          swal('Imagen Actualizada', this.usuario.nombre, 'success');
+          Swal.fire('Imagen Actualizada', this.usuario?.nombre, 'success');
           this.guardarLocalStorage(this.token, resp.usuario, this.menu);
         })
         .catch(resp => {
@@ -150,7 +152,7 @@ export class UsuarioService {
     const url = URL_SERVICIOS + '/usuario/' + id + '?token=' + this.token;
     return this._http.delete(url).pipe(
       map( (res: any) => {
-        swal('Usuario Borrado', 'El usuario ha sido eliminado correctamente', 'success');
+        Swal.fire('Usuario Borrado', 'El usuario ha sido eliminado correctamente', 'success');
         return true;
       })
     );

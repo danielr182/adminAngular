@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SubirArchivoService } from '../../services/subir-archivo/subir-archivo.service';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-upload',
@@ -9,22 +10,24 @@ import { ModalUploadService } from '../../components/modal-upload/modal-upload.s
 })
 export class ModalUploadComponent implements OnInit {
 
-  imagenSubir: File;
-  imagenTemp: string;
+  imagenSubir!: File | null;
+  imagenTemp!: string | ArrayBuffer | null;
 
   constructor(public _subirArchivoService: SubirArchivoService, public _modalUploadService: ModalUploadService) { }
 
   ngOnInit() {
   }
 
-  seleccionImagen( archivo: File ) {
+  seleccionImagen( event: EventTarget | null ) {
+    if (!event) return;
+    const archivo = (<HTMLInputElement>event).files?.[0];
     if ( !archivo ) {
       this.imagenSubir = null;
       return;
     }
     if (archivo.type.indexOf('image') < 0) {
       this.imagenSubir = null;
-      swal('Sólo Imágenes', 'El archivo seleccionado no es una imagen', 'error');
+      Swal.fire('Sólo Imágenes', 'El archivo seleccionado no es una imagen', 'error');
       return;
     }
     this.imagenSubir = archivo;
@@ -35,7 +38,9 @@ export class ModalUploadComponent implements OnInit {
   }
 
   subirImagen() {
-    this._subirArchivoService.subirArchivo(this.imagenSubir, this._modalUploadService.tipo, this._modalUploadService.id)
+    if (!this.imagenSubir) return;
+
+    this._subirArchivoService.subirArchivo(this.imagenSubir, this._modalUploadService.tipo ?? '', this._modalUploadService.id ?? '')
           .then( resp => {
             this._modalUploadService.notificacion.emit( resp );
             this.cerrarModal();

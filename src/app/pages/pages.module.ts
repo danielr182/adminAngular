@@ -11,7 +11,7 @@ import { RxjsComponent } from './rxjs/rxjs.component';
 
 // Módulos
 import { SharedModule } from '../shared/shared.module';
-import { ChartsModule } from 'ng2-charts';
+// import { ChartsModule } from 'ng2-charts';
 import { PipesModule } from '../pipes/pipes.module';
 
 // Rutas
@@ -57,7 +57,7 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
         CommonModule,
         SharedModule,
         FormsModule,
-        ChartsModule,
+        // ChartsModule,
         PipesModule,
         PAGES_ROUTES
     ]
