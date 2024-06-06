@@ -10,15 +10,15 @@ import { filter, map } from 'rxjs/operators';
 })
 export class BreadcrumbsComponent implements OnInit {
 
-  titulo!: string;
+  title!: string;
   constructor( private _router: Router, private _title: Title, private _meta: Meta) {
 
     this.getDataRoute().subscribe( event => {
-      this.titulo = event['titulo'];
-      this._title.setTitle(this.titulo);
+      this.title = event['title'];
+      this._title.setTitle(this.title);
       const metaTag: MetaDefinition = {
         name: 'decription',
-        content: this.titulo
+        content: this.title
       };
       this._meta.updateTag(metaTag);
     });

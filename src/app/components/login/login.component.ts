@@ -1,64 +1,69 @@
-import { UsuarioService } from '../../services/usuario/usuario.service';
-import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user/user.service';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { Usuario } from '../../models/usuario.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { User } from '../../models/user.model';
 
 declare function init_plugins(): void;
-declare const gapi: any;
+declare const google: any;
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
-  recuerdame: boolean = false;
-  email: string = '';
-  auth2: any;
+export class LoginComponent implements OnInit, AfterViewInit {
+  form!: FormGroup;
+  formSubmitted: boolean = false;
 
   constructor(
     private _router: Router,
-    public _usuarioService: UsuarioService
+    private fb: FormBuilder,
+    public _userService: UserService,
+    private ngZone: NgZone
   ) {}
+  @ViewChild('googleBtn') googleBtn!: ElementRef;
 
   ngOnInit() {
     init_plugins();
+    this.createForm();
+  }
+
+  ngAfterViewInit(): void {
     this.googleInit();
-    this.email = localStorage.getItem('email') || '';
-    this.recuerdame = this.email.length > 1;
   }
 
-  googleInit() {
-    gapi.load('auth2', () => {
-      this.auth2 = gapi.auth2.init({
-        client_id:
-          '621790932068-fsviqi6ag99b3n6d0r9ehf8p5v4rilbn.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_ofigin',
-        scope: 'profile email',
-      });
-      this.attachSignIn(document.getElementById('btnGoogle'));
+  googleInit(): void {
+    google.accounts.id.initialize({
+      client_id: '621790932068-fsviqi6ag99b3n6d0r9ehf8p5v4rilbn.apps.googleusercontent.com',
+      callback: (res: any) => this.ngZone.run(() => this.handleCredentialResponse(res)),
     });
+    google.accounts.id.renderButton(
+      this.googleBtn.nativeElement,
+      { theme: 'outline', size: 'large' } // customization attributes
+    );
   }
 
-  attachSignIn(element: any) {
-    this.auth2.attachClickHandler(element, {}, (googleUser: any) => {
-      // const profile = googleUser.getBasicProfile();
-      const token = googleUser.getAuthResponse().id_token;
-      this._usuarioService
-        .loginGoogle(token)
-        .subscribe(() => (window.location.href = '#/dashboard'));
-    });
+  handleCredentialResponse(response: any): void {
+    this._userService.loginGoogle(response.credential).subscribe(() => this._router.navigateByUrl('/'));
   }
 
-  ingresar(forma: NgForm) {
-    if (forma.invalid) {
+  login() {
+    this.formSubmitted = true;
+    if (this.form.invalid) {
       return;
     }
-    const usuario = new Usuario('', forma.value.email, forma.value.password);
+    const { email, password } = this.form.value;
+    const user = new User({ name: '', email, password });
 
-    this._usuarioService
-      .login(usuario, forma.value.recuerdame)
-      .subscribe(() => this._router.navigate(['/dashboard']));
+    this._userService.login(user, this.form.value.rememberMe).subscribe(() => this._router.navigateByUrl('/'));
+  }
+
+  private createForm(): void {
+    this.form = this.fb.group({
+      email: [localStorage.getItem('email') || '', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      rememberMe: [!!localStorage.getItem('email')],
+    });
   }
 }

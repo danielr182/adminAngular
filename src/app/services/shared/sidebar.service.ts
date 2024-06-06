@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ServiceModule } from '../service.module';
-import { UsuarioService } from '../usuario/usuario.service';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: ServiceModule
@@ -8,55 +8,54 @@ import { UsuarioService } from '../usuario/usuario.service';
 
 export class SidebarService {
 
-  menu: any[] = [];
-  // menu: any = [
-  //   {
-  //     titulo: 'Principal',
-  //     icono: 'mdi mdi-gauge',
-  //     submenu: [
-  //       {
-  //         titulo: 'Dashboard',
-  //         url: '/dashboard'
-  //       },
-  //       {
-  //         titulo: 'ProgressBar',
-  //         url: '/progress'
-  //       },
-  //       {
-  //         titulo: 'Graficas',
-  //         url: '/graficas1'
-  //       },
-  //       {
-  //         titulo: 'Promesas',
-  //         url: '/promesas'
-  //       },
-  //       {
-  //         titulo: 'RxJs',
-  //         url: '/rxjs'
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     titulo: 'Mantenimientos',
-  //     icono: 'mdi mdi-folder-lock-open',
-  //     submenu: [
-  //       {
-  //         titulo: 'Usuarios',
-  //         url: '/usuarios'
-  //       },
-  //       {
-  //         titulo: 'Hospitales',
-  //         url: '/hospitales'
-  //       },
-  //       {
-  //         titulo: 'Médicos',
-  //         url: '/medicos'
-  //       }
-  //     ]
-  //   }
-  // ];
+  menu: any[] = [
+    {
+      title: 'Dashboard',
+      icon: 'mdi mdi-gauge',
+      submenu: [
+        {
+          title: 'Dashboard',
+          url: '/dashboard'
+        },
+        {
+          title: 'ProgressBar',
+          url: '/progress'
+        },
+        {
+          title: 'Graficas',
+          url: '/graficas1'
+        },
+        {
+          title: 'Promesas',
+          url: '/promesas'
+        },
+        {
+          title: 'RxJs',
+          url: '/rxjs'
+        }
+      ]
+    },
+    {
+      title: 'Maintenance',
+      icon: 'mdi mdi-folder-lock-open',
+      submenu: [
+        {
+          title: 'Users',
+          url: '/users'
+        },
+        {
+          title: 'Hospitals',
+          url: '/hospitals'
+        },
+        {
+          title: 'Medics',
+          url: '/medics'
+        }
+      ]
+    }
+  ];
 
-  constructor(public _usuarioService: UsuarioService) {
-    this.menu = _usuarioService.menu;
+  constructor(public _userService: UserService) {
+    // this.menu = _userService.menu;
   }
 }

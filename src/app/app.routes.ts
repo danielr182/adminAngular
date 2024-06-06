@@ -1,9 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 
-
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './login/register.component';
-import { NopagefoundComponent } from './nopagefound/nopagefound.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/login/register.component';
+import { NopagefoundComponent } from './components/nopagefound/nopagefound.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },

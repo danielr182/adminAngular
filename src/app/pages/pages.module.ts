@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { PagesComponent } from '../pages/pages.component';
@@ -22,10 +22,10 @@ import { GraficoDonaComponent } from '../components/grafico-dona/grafico-dona.co
 import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { ProfileComponent } from './profile/profile.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
-import { HospitalesComponent } from './hospitales/hospitales.component';
-import { MedicosComponent } from './medicos/medicos.component';
-import { MedicoComponent } from './medicos/medico.component';
+import { UsersComponent } from './users/users.component';
+import { HospitalsComponent } from './hospitals/hospitals.component';
+import { MedicsComponent } from './medics/medics.component';
+import { MedicComponent } from './medics/medic.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 
 
@@ -41,11 +41,11 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
         PromesasComponent,
         RxjsComponent,
         ProfileComponent,
-        UsuariosComponent,
+        UsersComponent,
         ModalUploadComponent,
-        HospitalesComponent,
-        MedicosComponent,
-        MedicoComponent,
+        HospitalsComponent,
+        MedicsComponent,
+        MedicComponent,
         BusquedaComponent
     ],
     exports: [
@@ -57,6 +57,7 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
         CommonModule,
         SharedModule,
         FormsModule,
+        ReactiveFormsModule,
         // ChartsModule,
         PipesModule,
         PAGES_ROUTES

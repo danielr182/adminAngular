@@ -1,77 +1,97 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { ServiceModule } from '../service.module';
-import { SubirArchivoService } from '../../services/subir-archivo/subir-archivo.service';
+import { FileUploadService } from '../file-upload/file-upload.service';
 import { Hospital } from '../../models/hospital.model';
-import { URL_SERVICIOS } from '../../config/config';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
+import { HospitalApi } from '../../models/api/hospital-api.model';
+import { SearchApi } from '../../models/api/search-api.model';
+import { HospitalPaginationApi } from '../../models/api/pagination-api.model';
 
 @Injectable({
-  providedIn: ServiceModule
+  providedIn: ServiceModule,
 })
 export class HospitalService {
+  hospitalUrl = environment.base_url + '/hospital';
 
-  token!: string;
+  constructor(public _http: HttpClient, public _fileUploadService: FileUploadService) {}
 
-  constructor( public _http: HttpClient, public _subirArchivoService: SubirArchivoService ) {
-    this.cargarLocalStorage();
+  get token(): string {
+    return localStorage.getItem('token') || '';
   }
 
-  cargarLocalStorage() {
-    this.token = localStorage.getItem('token') ?? '';
+  get headers(): Object {
+    return {
+      headers: {
+        'x-token': this.token,
+      },
+    };
   }
 
-  cargarHospitales( desde: number = 0 ) {
-    const url = URL_SERVICIOS + '/hospital?desde=' + desde;
-    return this._http.get(url);
-  }
-
-  buscarHospital( termino: string ) {
-    const url = URL_SERVICIOS + '/busqueda/coleccion/hospitales/' + termino;
-    return this._http.get(url).pipe(
-      map( (res: any) => {
-        return res.hospitales;
+  loadHospitals(from: number = 0, limit: number = 0): Observable<HospitalPaginationApi> {
+    const url = `${this.hospitalUrl}?from=${from}&limit=${limit}`;
+    return this._http.get<HospitalPaginationApi>(url, this.headers).pipe(
+      map((res) => {
+        res.hospitals = res.hospitals.map((hospital) => new Hospital(hospital));
+        return res;
       })
     );
   }
 
-  obtenerHospitalPorId( id: string ) {
-    const url = URL_SERVICIOS + '/hospital/' + id;
-    return this._http.get(url).pipe(
-      map( (res: any) => {
+  searchHospital(term: string): Observable<Hospital[]> {
+    const url = `${environment.base_url}/search/collection/hospitals/${term}`;
+    return this._http.get<SearchApi>(url, this.headers).pipe(
+      map((res) => {
+        return res.results.map((hospital) => new Hospital(<Hospital>hospital));
+      })
+    );
+  }
+
+  getHospitalById(id: string): Observable<Hospital> {
+    const url = `${this.hospitalUrl}/${id}`;
+    return this._http.get<HospitalApi>(url, this.headers).pipe(
+      map((res) => {
         return res.hospital;
       })
     );
   }
 
-  crearHospital( hospital: Hospital) {
-    const url = URL_SERVICIOS + '/hospital?token=' + this.token;
-    return this._http.post(url, hospital).pipe(
-      map( (res: any) => {
-        Swal.fire('Hospital Creado', 'El hospital ha sido creado correctamente', 'success');
-        return true;
+  createHospital(hospital: Hospital): Observable<Hospital> {
+    const url = `${this.hospitalUrl}`;
+    return this._http.post<HospitalApi>(url, hospital, this.headers).pipe(
+      map((res) => {
+        Swal.fire('Hospital created', `The hospital ${hospital.name} has been created successfully`, 'success');
+        return res.hospital;
       })
     );
   }
 
-  actualizarHospital(hospital: Hospital) {
-    const url = URL_SERVICIOS + '/hospital/' + hospital._id + '?token=' + this.token;
-    return this._http.put( url, hospital).pipe(
-      map( (resp: any) => {
-        Swal.fire('Hospital actualizado', hospital.nombre, 'success');
-        return true;
+  updateHospital(hospital: Hospital): Observable<void> {
+    const url = `${this.hospitalUrl}/${hospital.uid}`;
+    return this._http.put(url, hospital, this.headers).pipe(
+      map(() => {
+        Swal.fire('Hospital updated', hospital.name, 'success');
+      }),
+      catchError((err) => {
+        Swal.fire('Error', err.error.message, 'error');
+        throw err;
       })
     );
   }
 
-  borrarHospital( id: string) {
-    const url = URL_SERVICIOS + '/hospital/' + id + '?token=' + this.token;
-    return this._http.delete(url).pipe(
-      map( (res: any) => {
-        Swal.fire('Hospital Borrado', 'El hospital ha sido eliminado correctamente', 'success');
-        return true;
+  deleteHospital(id: string): Observable<void> {
+    const url = `${this.hospitalUrl}/${id}`;
+    return this._http.delete(url, this.headers).pipe(
+      map(() => {
+        Swal.fire('Hospital deleted', 'The hospital has been deleted successfully', 'success');
+      }),
+      catchError((err) => {
+        Swal.fire('Error', err.error.message, 'error');
+        throw err;
       })
     );
   }

@@ -18,11 +18,11 @@
     width: 50px;
 }
 
-.oculto {
+.hidden {
     display: none;
 }
 
-.fondo-negro {
+.background-modal {
     background-color: rgba(0, 0, 0, 0.4);
     position: fixed;
     top: 0px;

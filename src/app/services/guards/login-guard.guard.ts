@@ -1,22 +1,17 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
-import { ServiceModule } from '../service.module';
-import { UsuarioService } from '../usuario/usuario.service';
+import { CanActivateFn, Router } from '@angular/router';
+import { UserService } from '../user/user.service';
+import { inject } from '@angular/core';
+import { tap } from 'rxjs';
 
-@Injectable({
-  providedIn: ServiceModule
-})
-export class LoginGuardGuard implements CanActivate {
+export const loginGuard: CanActivateFn = () => {
+  const _userService = inject(UserService);
+  const router = inject(Router);
 
-  constructor( public _usuarioService: UsuarioService, public router: Router) { }
-
-  canActivate() {
-    if (this._usuarioService.estaLogueado()) {
-      return true;
-    } else {
-      console.log('Bloqueado por el guard');
-      this.router.navigate(['/login']);
-      return false;
-    }
-  }
-}
+  return _userService.validateToken().pipe(
+    tap((isAuthenticated) => {
+      if (!isAuthenticated) {
+        router.navigateByUrl('/login');
+      }
+    })
+  );
+};

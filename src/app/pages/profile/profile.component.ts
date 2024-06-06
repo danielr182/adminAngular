@@ -1,58 +1,67 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Usuario } from '../../models/usuario.model';
-import { UsuarioService } from '../../services/service.index';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/service.index';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styles: []
+  styles: [],
 })
 export class ProfileComponent implements OnInit {
+  form!: FormGroup;
+  imageTemp!: string;
+  imageToUpload!: File | null;
+  user: User | null;
 
-  usuario: Usuario | null;
-  imagenSubir!: File | null;
-  imagenTemp!: string;
-
-  constructor( public _usuarioService: UsuarioService) {
-    this.usuario = _usuarioService.usuario;
+  constructor(public _userService: UserService, private fb: FormBuilder) {
+    this.user = _userService.user;
   }
 
   ngOnInit() {
+    this.createForm();
   }
 
-  guardar(forma: NgForm) {
-    if (!this.usuario) return;
-    this.usuario.nombre = forma.value.nombre;
-    if (!this.usuario.google) {
-      this.usuario.email = forma.value.email;
+  save() {
+    if (this.form.invalid || !this.user) return;
+
+    this.user.name = this.form.value.name;
+    if (!this.user.google) {
+      this.user.email = this.form.value.email;
     }
-    this._usuarioService.actualizarUsuario( this.usuario )
-        .subscribe();
+    this._userService.updateUser(this.user).subscribe();
   }
 
-  seleccionImagen( event: EventTarget | null ) {
+  imageSelection(event: EventTarget | null): void {
     if (!event) return;
-    const archivo = (<HTMLInputElement>event).files?.[0];
-    if ( !archivo ) {
-      this.imagenSubir = null;
+    const file = (<HTMLInputElement>event).files?.[0];
+    if (!file) {
+      this.imageToUpload = null;
+      this.imageTemp = '';
       return;
     }
-    if (archivo.type.indexOf('image') < 0) {
-      this.imagenSubir = null;
-      Swal.fire('Sólo Imágenes', 'El archivo seleccionado no es una imagen', 'error');
+    if (file.type.indexOf('image') < 0) {
+      this.imageToUpload = null;
+      Swal.fire('Only images', 'The selected file is not an image', 'error');
       return;
     }
-    this.imagenSubir = archivo;
+    this.imageToUpload = file;
     const reader = new FileReader();
-    const urlImagenTemp = reader.readAsDataURL( archivo );
-
-    reader.onloadend = () => this.imagenTemp = <string>reader.result;
+    reader.readAsDataURL(file);
+    reader.onloadend = () => (this.imageTemp = <string>reader.result);
   }
 
-  actualizarImagen() {
-    if (!this.imagenSubir) return;
-    this._usuarioService.actualizarImagen(this.imagenSubir, this.usuario?._id ?? '');
+  updateImage(): void {
+    if (!this.imageToUpload) return;
+
+    this._userService.updateImage(this.imageToUpload, this.user?.uid || '');
+  }
+
+  private createForm(): void {
+    this.form = this.fb.group({
+      email: [{ value: this.user?.email, disabled: !!this.user?.google }, [Validators.required, Validators.email]],
+      name: [this.user?.name, Validators.required],
+    });
   }
 }
