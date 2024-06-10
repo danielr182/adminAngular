@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 export class ModalUploadComponent implements OnInit {
   imageToUpload!: File | null;
   imageTemp!: string | ArrayBuffer | null;
+  isLoading = false;
 
   constructor(public _uploadFileService: FileUploadService, public _modalUploadService: ModalUploadService) {}
 
@@ -38,14 +39,17 @@ export class ModalUploadComponent implements OnInit {
   uploadImage(fileInput: HTMLInputElement): void {
     if (!this.imageToUpload || !this._modalUploadService.type) return;
 
+    this.isLoading = true;
     this._uploadFileService
       .uploadFile(this.imageToUpload, this._modalUploadService.type, this._modalUploadService.entity?.uid ?? '')
       .then((resp) => {
         this._modalUploadService.notification.next(resp);
+        this.isLoading = false;
         this.closeModal(fileInput);
       })
       .catch((err) => {
-        console.log('Error uploading.');
+        this.isLoading = false;
+        console.log('Error uploading.', err.error);
       });
   }
 

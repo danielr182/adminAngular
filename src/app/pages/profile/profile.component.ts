@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
   form!: FormGroup;
   imageTemp!: string;
   imageToUpload!: File | null;
+  isLoading = false;
   user: User | null;
 
   constructor(
@@ -59,7 +60,10 @@ export class ProfileComponent implements OnInit {
   updateImage(): void {
     if (!this.imageToUpload) return;
 
-    this._fileUploadService.updateImage(this.imageToUpload, this.user?.uid || '');
+    this.isLoading = true;
+    this._fileUploadService
+      .updateImage(this.imageToUpload, this.user?.uid || '')
+      .finally(() => (this.isLoading = false));
   }
 
   private createForm(): void {

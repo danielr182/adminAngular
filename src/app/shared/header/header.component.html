@@ -179,16 +179,16 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-            <img [src]="user?.urlImage" alt="user" class="profile-pic" />
+            <img [src]="_userService.user?.urlImage" alt="user" class="profile-pic" />
           </a>
           <div class="dropdown-menu dropdown-menu-right animated fadeIn">
             <ul class="dropdown-user">
               <li>
                 <div class="dw-user-box" align="center">
-                  <div class="u-img"><img [src]="user?.urlImage" alt="user" /></div>
+                  <div class="u-img"><img [src]="_userService.user?.urlImage" alt="user" /></div>
                   <div class="u-text">
-                    <h4>{{ user?.name }}</h4>
-                    <p class="text-muted">{{ user?.email }}</p>
+                    <h4>{{ _userService.user?.name }}</h4>
+                    <p class="text-muted">{{ _userService.user?.email }}</p>
                     <a routerLink="/profile" class="btn btn-rounded btn-danger btn-sm">My Profile</a>
                   </div>
                 </div>

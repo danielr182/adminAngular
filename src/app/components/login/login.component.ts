@@ -3,6 +3,7 @@ import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from 
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../../models/user.model';
+import { environment } from '../../../environments/environment';
 
 declare function init_plugins(): void;
 declare const google: any;
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   googleInit(): void {
     google.accounts.id.initialize({
-      client_id: '621790932068-fsviqi6ag99b3n6d0r9ehf8p5v4rilbn.apps.googleusercontent.com',
+      client_id: environment.google_client_id,
       callback: (res: any) => this.ngZone.run(() => this.handleCredentialResponse(res)),
     });
     google.accounts.id.renderButton(

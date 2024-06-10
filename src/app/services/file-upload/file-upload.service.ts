@@ -27,8 +27,8 @@ export class FileUploadService {
     }
   }
 
-  updateImage(file: File, id: string): void {
-    this.uploadFile(file, 'users', id)
+  updateImage(file: File, id: string): Promise<any> {
+    return this.uploadFile(file, 'users', id)
       .then((resp: any) => {
         if (!resp.ok) throw resp;
         if (!this._userService.user) return;

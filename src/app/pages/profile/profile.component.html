@@ -42,11 +42,11 @@
         <br />
         <button
           (click)="updateImage()"
-          [disabled]="!imageToUpload"
+          [disabled]="!imageToUpload || isLoading"
           type="button"
           class="btn btn-success waves-effect waves-light m-r-10">
           <i class="fa fa-save"></i>
-          Update image
+          @if (isLoading) { Loading... } @else { Update image }
         </button>
       </div>
     </div>

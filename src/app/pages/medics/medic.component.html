@@ -28,9 +28,9 @@
                 <option *ngFor="let hospital of hospitals" [value]="hospital.uid">{{ hospital.name }}</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10" [disabled]="form.invalid">
+            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10" [disabled]="form.invalid || isLoading">
               <i class="fa fa-save"></i>
-              Save
+              @if (isLoading) { Loading... } @else { Save }
             </button>
             <a routerLink="/medics" class="btn btn-inverse waves-effect waves-light">Cancel</a>
           </form>

@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-prod": "npm run config && ng build --configuration=production",
+    "config": "ts-node src/environments/set-env.ts"
   },
   "private": true,
   "dependencies": {

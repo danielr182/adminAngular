@@ -17,8 +17,13 @@
           <input #fileInput (change)="imageSelection($event.target)" type="file" />
         </div>
         <div class="modal-footer">
-          <button (click)="uploadImage(fileInput)" [disabled]="!imageTemp" type="button" class="btn btn-primary">
-            Upload image
+          <button
+            (click)="uploadImage(fileInput)"
+            [disabled]="!imageTemp"
+            type="button"
+            class="btn btn-primary"
+            [disabled]="isLoading">
+            @if (isLoading) { Loading... } @else { Upload image }
           </button>
           <button (click)="closeModal(fileInput)" type="button" class="btn btn-secondary">Cancel</button>
         </div>

@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
   styles: [],
 })
 export class MedicComponent implements OnInit, OnDestroy {
+  isLoading = false;
   hospitals: Hospital[] = [];
   selectedHospital: Hospital = new Hospital({ name: '', uid: '' });
   medic: Medic = new Medic(this.selectedHospital, '', '', '', '');
@@ -80,11 +81,15 @@ export class MedicComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.isLoading = true;
     this.medic.name = this.form.get('name')?.value;
     this.medic.hospital = this.form.get('hospital')?.value;
-    this._medicService.updateMedic(this.medic).subscribe((medic) => {
-      this.medic = <Medic>medic;
-      this._router.navigate(['/medic', this.medic.uid]);
+    this._medicService.updateMedic(this.medic).subscribe({
+      next: (medic) => {
+        this.medic = <Medic>medic;
+        this._router.navigate(['/medic', this.medic.uid]);
+      },
+      complete: () => (this.isLoading = false),
     });
   }
 
