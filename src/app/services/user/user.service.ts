@@ -30,14 +30,6 @@ export class UserService {
     return localStorage.getItem('token') || '';
   }
 
-  get headers(): Object {
-    return {
-      headers: {
-        'x-token': this.token,
-      },
-    };
-  }
-
   loadLocalStorage(): void {
     const localUser = localStorage.getItem('user');
     const localMenu = localStorage.getItem('menu') ?? '[]';
@@ -115,7 +107,7 @@ export class UserService {
   updateUser(user: User, showAlertOnSuccess = true): Observable<void> {
     const url = `${this.userUrl}/${user.uid}`;
     return this._http
-      .put(url, user, this.headers)
+      .put(url, user)
       .pipe(
         map((resp: any) => {
           if (user.uid === this.user?.uid) {
@@ -135,7 +127,7 @@ export class UserService {
   loadUsers(from: number = 0, limit: number = 0): Observable<UserPaginationApi> {
     const url = `${this.userUrl}?from=${from}&limit=${limit}`;
     return this._http
-      .get<UserPaginationApi>(url, this.headers)
+      .get<UserPaginationApi>(url)
       .pipe(
         map((res) => {
           res.users = res.users.map((user) => new User(user));
@@ -147,7 +139,7 @@ export class UserService {
   searchUser(term: string): Observable<User[]> {
     const url = `${environment.base_url}/search/collection/users/${term}`;
     return this._http
-      .get<SearchApi>(url, this.headers)
+      .get<SearchApi>(url)
       .pipe(
         map((res) => {
           return res.results.map((user) => new User(<User>user));
@@ -161,7 +153,7 @@ export class UserService {
 
   deleteUser(id: string): Observable<void> {
     const url = `${this.userUrl}/${id}`;
-    return this._http.delete(url, this.headers).pipe(
+    return this._http.delete(url).pipe(
       map(() => {
         Swal.fire('User deleted', 'The user has been deleted successfully', 'success');
       }),
@@ -177,7 +169,7 @@ export class UserService {
     const url = environment.base_url + '/login/renew';
 
     return this._http
-      .get<LoginApi>(url, this.headers)
+      .get<LoginApi>(url)
       .pipe(
         map((resp) => {
           this.saveOnLocalStorage(resp.token, resp.user, resp.menu);

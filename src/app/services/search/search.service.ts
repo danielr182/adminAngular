@@ -10,20 +10,8 @@ export class SearchService {
 
   constructor(private _http: HttpClient) { }
 
-  private get token(): string {
-    return localStorage.getItem('token') || '';
-  }
-
-  private get headers(): Object {
-    return {
-      headers: {
-        'x-token': this.token,
-      },
-    };
-  }
-
   searchAll(term: string): Observable<GeneralSearchApi> {
     const url = `${this.searchUrl}/${term}`;
-    return this._http.get<GeneralSearchApi>(url, this.headers);
+    return this._http.get<GeneralSearchApi>(url);
   }
 }

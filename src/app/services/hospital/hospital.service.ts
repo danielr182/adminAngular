@@ -17,21 +17,9 @@ export class HospitalService {
 
   constructor(public _http: HttpClient, public _fileUploadService: FileUploadService) {}
 
-  get token(): string {
-    return localStorage.getItem('token') || '';
-  }
-
-  get headers(): Object {
-    return {
-      headers: {
-        'x-token': this.token,
-      },
-    };
-  }
-
   loadHospitals(from: number = 0, limit: number = 0): Observable<HospitalPaginationApi> {
     const url = `${this.hospitalUrl}?from=${from}&limit=${limit}`;
-    return this._http.get<HospitalPaginationApi>(url, this.headers).pipe(
+    return this._http.get<HospitalPaginationApi>(url).pipe(
       map((res) => {
         res.hospitals = res.hospitals.map((hospital) => new Hospital(hospital));
         return res;
@@ -41,7 +29,7 @@ export class HospitalService {
 
   searchHospital(term: string): Observable<Hospital[]> {
     const url = `${environment.base_url}/search/collection/hospitals/${term}`;
-    return this._http.get<SearchApi>(url, this.headers).pipe(
+    return this._http.get<SearchApi>(url).pipe(
       map((res) => {
         return res.results.map((hospital) => new Hospital(<Hospital>hospital));
       })
@@ -50,7 +38,7 @@ export class HospitalService {
 
   getHospitalById(id: string): Observable<Hospital> {
     const url = `${this.hospitalUrl}/${id}`;
-    return this._http.get<HospitalApi>(url, this.headers).pipe(
+    return this._http.get<HospitalApi>(url).pipe(
       map((res) => {
         return res.hospital;
       })
@@ -59,7 +47,7 @@ export class HospitalService {
 
   createHospital(hospital: Hospital): Observable<Hospital> {
     const url = `${this.hospitalUrl}`;
-    return this._http.post<HospitalApi>(url, hospital, this.headers).pipe(
+    return this._http.post<HospitalApi>(url, hospital).pipe(
       map((res) => {
         Swal.fire('Hospital created', `The hospital ${hospital.name} has been created successfully`, 'success');
         return res.hospital;
@@ -69,7 +57,7 @@ export class HospitalService {
 
   updateHospital(hospital: Hospital): Observable<void> {
     const url = `${this.hospitalUrl}/${hospital.uid}`;
-    return this._http.put(url, hospital, this.headers).pipe(
+    return this._http.put(url, hospital).pipe(
       map(() => {
         Swal.fire('Hospital updated', hospital.name, 'success');
       }),
@@ -82,7 +70,7 @@ export class HospitalService {
 
   deleteHospital(id: string): Observable<void> {
     const url = `${this.hospitalUrl}/${id}`;
-    return this._http.delete(url, this.headers).pipe(
+    return this._http.delete(url).pipe(
       map(() => {
         Swal.fire('Hospital deleted', 'The hospital has been deleted successfully', 'success');
       }),

@@ -41,10 +41,17 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   loadUsers() {
     this.isLoading = true;
-    this._userService.loadUsers(this.from).subscribe((res) => {
-      this.totalRows = res.total;
-      this.users = res.users;
-      this.isLoading = false;
+    this._userService.loadUsers(this.from).subscribe({
+      next: (res) => {
+        this.totalRows = res.total;
+        this.users = res.users;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        Swal.fire('Error', err.error.message, 'error');
+        throw err;
+      },
     });
   }
 

@@ -21,26 +21,14 @@ export class MedicService {
     public _userService: UserService
   ) {}
 
-  get token(): string {
-    return localStorage.getItem('token') || '';
-  }
-
-  get headers(): Object {
-    return {
-      headers: {
-        'x-token': this.token,
-      },
-    };
-  }
-
   loadMedics(from: number = 0, limit: number = 0): Observable<MedicPaginationApi> {
     const url = `${this.medicUrl}?from=${from}&limit=${limit}`;
-    return this._http.get<MedicPaginationApi>(url, this.headers);
+    return this._http.get<MedicPaginationApi>(url);
   }
 
   searchMedic(term: string): Observable<Medic[]> {
     const url = `${environment.base_url}/search/collection/medics/${term}`;
-    return this._http.get<SearchApi>(url, this.headers).pipe(
+    return this._http.get<SearchApi>(url).pipe(
       map((res) => {
         return <Medic[]>res.results;
       })
@@ -49,7 +37,7 @@ export class MedicService {
 
   getMedicById(id: string): Observable<Medic> {
     const url = `${this.medicUrl}/${id}`;
-    return this._http.get<MedicApi>(url, this.headers).pipe(
+    return this._http.get<MedicApi>(url).pipe(
       map((res) => {
         return res.medic;
       })
@@ -58,7 +46,7 @@ export class MedicService {
 
   deleteMedic(id: string): Observable<void> {
     const url = `${this.medicUrl}/${id}`;
-    return this._http.delete(url, this.headers).pipe(
+    return this._http.delete(url).pipe(
       map(() => {
         Swal.fire('Medic deleted', 'The medic has been deleted successfully', 'success');
       }),
@@ -73,7 +61,7 @@ export class MedicService {
     if (medic.uid) {
       // updating
       const url = `${this.medicUrl}/${medic.uid}`;
-      return this._http.put(url, medic, this.headers).pipe(
+      return this._http.put(url, medic).pipe(
         map(() => {
           Swal.fire('Medic updated', medic.name, 'success');
         }),
@@ -84,7 +72,7 @@ export class MedicService {
       );
     } else {
       // creating
-      return this._http.post<MedicApi>(this.medicUrl, medic, this.headers).pipe(
+      return this._http.post<MedicApi>(this.medicUrl, medic).pipe(
         map((res) => {
           Swal.fire('Medic created', `The medic ${medic.name} has been created successfully`, 'success');
           return res.medic;
