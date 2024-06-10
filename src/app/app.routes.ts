@@ -1,14 +1,13 @@
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/login/register.component';
+import { NopagefoundComponent } from './components/nopagefound/nopagefound.component';
+import { loginGuard } from './services/service.index';
 
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './login/register.component';
-import { NopagefoundComponent } from './nopagefound/nopagefound.component';
-
-const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: '**', component: NopagefoundComponent}
+export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: '', canMatch: [loginGuard], loadChildren: () => import('./pages/pages.module').then((m) => m.PagesModule) },
+  { path: '**', component: NopagefoundComponent },
 ];
-
-export const APP_ROUTES = RouterModule.forRoot( routes, { useHash: true } );

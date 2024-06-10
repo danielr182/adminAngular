@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsService, UserService } from '../services/service.index';
 
 declare function init_plugins(): void;
 
@@ -9,10 +10,11 @@ declare function init_plugins(): void;
 })
 export class PagesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _userService: UserService ,private _settingsService: SettingsService) { }
 
   ngOnInit() {
     init_plugins();
+    this._userService.menu
   }
 
 }

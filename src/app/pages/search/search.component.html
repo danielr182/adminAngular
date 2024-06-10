@@ -1,0 +1,56 @@
+<div class="row animated fadeIn">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Users</h4>
+        <table class="table table-hover animated fadeIn" *ngIf="users.length">
+          <tbody>
+            <tr *ngFor="let user of users" class="pointer" [routerLink]="['/users']">
+              <td>
+                <img [src]="user.img | image" class="img-50 img-circle" />
+              </td>
+              <td class="align-content-center">{{ user.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert alert-info animated fadeIn" *ngIf="users.length === 0">No results</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Medics</h4>
+        <table class="table table-hover animated fadeIn" *ngIf="medics.length > 0">
+          <tbody>
+            <tr *ngFor="let medic of medics" class="pointer" [routerLink]="['/medic', medic.uid]">
+              <td>
+                <img [src]="medic.img | image : 'medics'" class="img-50 img-circle" />
+              </td>
+              <td class="align-content-center">{{ medic.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert alert-info animated fadeIn" *ngIf="medics.length === 0">No results</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Hospitals</h4>
+        <table class="table table-hover animated fadeIn" *ngIf="hospitals.length > 0">
+          <tbody>
+            <tr *ngFor="let hospital of hospitals" class="pointer" [routerLink]="['/hospitals']">
+              <td>
+                <img [src]="hospital.img | image : 'hospitals'" class="img-50 img-circle" />
+              </td>
+              <td class="align-content-center">{{ hospital.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert alert-info animated fadeIn" *ngIf="hospitals.length === 0">No results</div>
+      </div>
+    </div>
+  </div>
+</div>

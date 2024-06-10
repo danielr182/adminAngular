@@ -1,0 +1,17 @@
+.graphic {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .card-body {
+    min-width: 300px;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .graphic {
+    gap: 64px;
+  }
+}

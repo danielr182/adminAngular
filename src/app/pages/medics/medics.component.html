@@ -1,0 +1,88 @@
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <input
+          #input
+          (input)="term$.next(input.value || '')"
+          type="text"
+          class="form-control"
+          placeholder="Search Medic" />
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (isLoading) {
+<div class="row animated fadeIn">
+  <div class="col-sm-12">
+    <div class="alert alert-info text-center">
+      <strong>Loading...</strong>
+      <br />
+      <i class="fa fa-refresh fa-spin fa-2x"></i>
+    </div>
+  </div>
+</div>
+}@else {
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card container-fluid overflow-auto">
+      <div class="card-body">
+        <div class="row justify-content-between m-b-30">
+          <h3 class="card-title">
+            Registered Medics (
+            <small>{{ totalRows }}</small>
+            )
+          </h3>
+          <div class="">
+            <button
+              [routerLink]="['/medic', 'new']"
+              class="btn waves-effect waves-light btn-rounded btn-primary float-right">
+              <i class="fa fa-plus m-r-10"></i>
+              Create Medic
+            </button>
+          </div>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="w150">Photo</th>
+              <th>Name</th>
+              <th>Hospital</th>
+              <th class="w150">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (medic of medics; track $index) {
+            <tr>
+              <td>
+                <img
+                  (click)="showModal(medic)"
+                  [src]="medic.img | image : 'medics'"
+                  class="img-50 img-circle pointer" />
+              </td>
+              <td class="text-field align-content-center">{{ medic.name }}</td>
+              <td class="text-field align-content-center">{{ getHospitalName(medic.hospital) }}</td>
+              <td class="button-wrapper">
+                <button [routerLink]="['/medic', medic.uid]" class="btn btn-primary m-r-10">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button (click)="deleteMedic(medic)" class="btn btn-danger">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </td>
+            </tr>
+            }@empty {
+            <tr>
+              <td colspan="3" class="text-center">No results</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+        <button (click)="changeFrom(-5)" class="btn btn-secondary m-r-10 animated fadeIn">Previous</button>
+        <button (click)="changeFrom(5)" class="btn btn-secondary animated fadeIn">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+}

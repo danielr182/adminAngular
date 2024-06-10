@@ -3,37 +3,50 @@ import { Routes, RouterModule } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { ProgressComponent } from './progress/progress.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { Graficas1Component } from './graficas1/graficas1.component';
-import { PromesasComponent } from './promesas/promesas.component';
+import { GraphicsComponent } from './graphics/graphics.component';
+import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { ProfileComponent } from './profile/profile.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
-import { HospitalesComponent } from './hospitales/hospitales.component';
-import { MedicosComponent } from './medicos/medicos.component';
-import { MedicoComponent } from './medicos/medico.component';
-import { BusquedaComponent } from './busqueda/busqueda.component';
-
-import { LoginGuardGuard, AdminGuard } from '../services/service.index';
-
+import { UsersComponent } from './users/users.component';
+import { HospitalsComponent } from './hospitals/hospitals.component';
+import { MedicsComponent } from './medics/medics.component';
+import { MedicComponent } from './medics/medic.component';
+import { SearchComponent } from './search/search.component';
+import { adminGuard, loginGuard } from '../services/service.index';
 
 const pagesRoutes: Routes = [
-    { path: '', component: PagesComponent, canActivate: [ LoginGuardGuard ], children: [
-        { path: 'dashboard', component: DashboardComponent, data: {titulo: 'Dashboard'} },
-        { path: 'progress', component: ProgressComponent, data: {titulo: 'Progress'} },
-        { path: 'graficas1', component: Graficas1Component , data: {titulo: 'Gráficas'}},
-        { path: 'promesas', component: PromesasComponent, data: {titulo: 'Dashboard'} },
-        { path: 'rxjs', component: RxjsComponent, data: {titulo: 'RxJs'} },
-        { path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Ajustes del Tema'} },
-        { path: 'profile', component: ProfileComponent, data: {titulo: 'Perfil de Usuario'} },
-        { path: 'busqueda/:termino', component: BusquedaComponent, data: {titulo: 'Buscador'} },
-        // Mantenimientos
-        { path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: {titulo: 'Mantenimiento de Usuarios'} },
-        { path: 'hospitales', component: HospitalesComponent, data: {titulo: 'Mantenimiento de Hospitales'} },
-        { path: 'medicos', component: MedicosComponent, data: {titulo: 'Mantenimiento de Médicos'} },
-        { path: 'medico/:id', component: MedicoComponent, data: {titulo: 'Actualizar Médico'} },
-        { path: '', pathMatch: 'full', redirectTo: '/dashboard'}
-    ]}
+  {
+    path: '',
+    component: PagesComponent,
+    canActivate: [loginGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent, data: { title: 'Dashboard' } },
+      { path: 'progress', component: ProgressComponent, data: { title: 'Progress' } },
+      { path: 'graphics', component: GraphicsComponent, data: { title: 'Graphics' } },
+      { path: 'promises', component: PromisesComponent, data: { title: 'Dashboard' } },
+      { path: 'rxjs', component: RxjsComponent, data: { title: 'RxJs' } },
+      { path: 'account-settings', component: AccountSettingsComponent, data: { title: 'Account Settings' } },
+      { path: 'profile', component: ProfileComponent, data: { title: 'User Profile' } },
+      { path: 'search/:term', component: SearchComponent, data: { title: 'Search' } },
+      // Maintenance
+      {
+        path: 'users',
+        component: UsersComponent,
+        canActivate: [adminGuard],
+        data: { title: 'User maintenance' },
+      },
+      {
+        path: 'hospitals',
+        component: HospitalsComponent,
+        canActivate: [adminGuard],
+        data: { title: 'Hospitals maintenance' },
+      },
+      { path: 'medics', component: MedicsComponent, canActivate: [adminGuard], data: { title: 'Medics maintenance' } },
+      { path: 'medic/:id', component: MedicComponent, canActivate: [adminGuard], data: { title: 'Update medic' } },
+      { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
+    ],
+  },
 ];
 
-export const PAGES_ROUTES = RouterModule.forChild( pagesRoutes );
+export const PAGES_ROUTES = RouterModule.forChild(pagesRoutes);

@@ -1,59 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-import { SubirArchivoService } from '../../services/subir-archivo/subir-archivo.service';
+import { FileUploadService } from '../../services/file-upload/file-upload.service';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-upload',
   templateUrl: './modal-upload.component.html',
-  styles: []
+  styles: [],
 })
 export class ModalUploadComponent implements OnInit {
+  imageToUpload!: File | null;
+  imageTemp!: string | ArrayBuffer | null;
+  isLoading = false;
 
-  imagenSubir!: File | null;
-  imagenTemp!: string | ArrayBuffer | null;
+  constructor(public _uploadFileService: FileUploadService, public _modalUploadService: ModalUploadService) {}
 
-  constructor(public _subirArchivoService: SubirArchivoService, public _modalUploadService: ModalUploadService) { }
+  ngOnInit() {}
 
-  ngOnInit() {
-  }
-
-  seleccionImagen( event: EventTarget | null ) {
+  imageSelection(event: EventTarget | null): void {
     if (!event) return;
-    const archivo = (<HTMLInputElement>event).files?.[0];
-    if ( !archivo ) {
-      this.imagenSubir = null;
+    const file = (<HTMLInputElement>event).files?.[0];
+    if (!file) {
+      this.imageToUpload = null;
+      this.imageTemp = null;
       return;
     }
-    if (archivo.type.indexOf('image') < 0) {
-      this.imagenSubir = null;
-      Swal.fire('Sólo Imágenes', 'El archivo seleccionado no es una imagen', 'error');
+    if (file.type.indexOf('image') < 0) {
+      this.imageToUpload = null;
+      Swal.fire('Only images', 'The selected file is not an image', 'error');
       return;
     }
-    this.imagenSubir = archivo;
+    this.imageToUpload = file;
     const reader = new FileReader();
-    const urlImagenTemp = reader.readAsDataURL( archivo );
-
-    reader.onloadend = () => this.imagenTemp = reader.result;
+    reader.readAsDataURL(file);
+    reader.onloadend = () => (this.imageTemp = reader.result);
   }
 
-  subirImagen() {
-    if (!this.imagenSubir) return;
+  uploadImage(fileInput: HTMLInputElement): void {
+    if (!this.imageToUpload || !this._modalUploadService.type) return;
 
-    this._subirArchivoService.subirArchivo(this.imagenSubir, this._modalUploadService.tipo ?? '', this._modalUploadService.id ?? '')
-          .then( resp => {
-            this._modalUploadService.notificacion.emit( resp );
-            this.cerrarModal();
-          })
-          .catch( err => {
-            console.log('Error en la carga...');
-          });
+    this.isLoading = true;
+    this._uploadFileService
+      .uploadFile(this.imageToUpload, this._modalUploadService.type, this._modalUploadService.entity?.uid ?? '')
+      .then((resp) => {
+        this._modalUploadService.notification.next(resp);
+        this.isLoading = false;
+        this.closeModal(fileInput);
+      })
+      .catch((err) => {
+        this.isLoading = false;
+        console.log('Error uploading.', err.error);
+      });
   }
 
-  cerrarModal() {
-    this.imagenTemp = null;
-    this.imagenSubir = null;
-    this._modalUploadService.ocultarModal();
+  closeModal(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
+    this.imageTemp = null;
+    this.imageToUpload = null;
+    this._modalUploadService.hideModal();
   }
-
 }

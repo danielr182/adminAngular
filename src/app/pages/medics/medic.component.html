@@ -1,0 +1,51 @@
+<div class="row animated fadeIn">
+  <div class="col-md-6">
+    <div class="card card-body h-full m-b-0">
+      <h3 class="box-title m-b-0">Medic</h3>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          @if (this.medic.uid) {
+          <div class="col-md-3 mx-auto animated fadeIn">
+            <div class="card card-body text-center">
+              <h4 class="box-title m-b-0">Photo</h4>
+              <img (click)="changePhoto()" [src]="medic.img | image : 'medics'" class="img-circle img-fluid pointer" />
+            </div>
+          </div>
+          }
+          <form [formGroup]="form" (ngSubmit)="updateMedic()">
+            <div class="form-group">
+              <label>Name of the medic</label>
+              <input formControlName="name" name="name" type="text" class="form-control" placeholder="Medic name" />
+            </div>
+            <div class="form-group">
+              <label>Hospital</label>
+              <select
+                formControlName="hospital"
+                (change)="changeHospital(form.get('hospital')?.value)"
+                name="hospital"
+                class="form-control">
+                <option value="">Select Hospital</option>
+                <option *ngFor="let hospital of hospitals" [value]="hospital.uid">{{ hospital.name }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10" [disabled]="form.invalid || isLoading">
+              <i class="fa fa-save"></i>
+              @if (isLoading) { Loading... } @else { Save }
+            </button>
+            <a routerLink="/medics" class="btn btn-inverse waves-effect waves-light">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card card-body h-full m-b-0 d-flex align-items-center">
+      <h4 class="box-title w-full m-b-40">Hospital</h4>
+      @if (selectedHospital.uid || this.medic.uid) {
+      <img [src]="selectedHospital.img | image : 'hospitals'" class="rounded img-fluid img-400 animated fadeIn" />
+      }@else {
+        <p>No hospital selected</p>
+      }
+    </div>
+  </div>
+</div>

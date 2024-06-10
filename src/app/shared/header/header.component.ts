@@ -1,25 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../../services/service.index';
-import { Usuario } from '../../models/usuario.model';
+import { UserService } from '../../services/service.index';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styles: []
+  styles: [],
 })
 export class HeaderComponent implements OnInit {
+  constructor(public _userService: UserService, public _router: Router) {}
 
-  usuario!: Usuario | null;
+  ngOnInit() {}
 
-  constructor( public _usuarioService: UsuarioService, public _router: Router) { }
-
-  ngOnInit() {
-    this.usuario = this._usuarioService.usuario;
+  search(term: string) {
+    if (!term) return;
+    this._router.navigate(['/search', term]);
   }
-
-  buscar(termino: string) {
-    this._router.navigate(['/busqueda', termino]);
-  }
-
 }

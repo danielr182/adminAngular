@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-prod": "npm run config && ng build --configuration=production",
+    "config": "ts-node src/environments/set-env.ts"
   },
   "private": true,
   "dependencies": {
@@ -18,8 +20,8 @@
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
-    "chart.js": "^4.3.0",
-    "ng2-charts": "^6.0.1",
+    "chart.js": "^4.4.3",
+    "ng2-charts": "^5.0.4",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.11.0",
     "tslib": "^2.3.0",
