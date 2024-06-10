@@ -9,7 +9,7 @@ const setEnv = () => {
   });
   // `environment.ts` file structure
   const envConfigFile = `export const environment = {
-    google_client_id: '${process.env['GOOGLE_CLIENT_ID']}'
+    google_client_id: '${process.env['GOOGLE_CLIENT_ID']}',
     base_url: '${process.env['BASE_URL']}/api',
     production: true,
   };
