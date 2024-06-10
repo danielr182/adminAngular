@@ -88,8 +88,9 @@ export class MedicComponent implements OnInit, OnDestroy {
       next: (medic) => {
         this.medic = <Medic>medic;
         this._router.navigate(['/medic', this.medic.uid]);
+        this.isLoading = false;
       },
-      complete: () => (this.isLoading = false),
+      error: () => (this.isLoading = false),
     });
   }
 
