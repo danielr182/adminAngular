@@ -1,52 +1,47 @@
 import { Injectable, Inject } from '@angular/core';
-import { ServiceModule } from '../service.module';
 import { DOCUMENT } from '@angular/common';
 
-@Injectable({
-  providedIn: ServiceModule
-})
-
+@Injectable()
 export class SettingsService {
-
-  ajustes: Ajustes = {
-    temaUrl: 'assets/css/colors/default.css',
-    tema: 'default'
+  settings: Setting = {
+    themeUrl: 'assets/css/colors/default.css',
+    theme: 'default',
   };
 
-  constructor(@Inject( DOCUMENT ) private _document: Document) {
-    this.cargarAjustes();
-   }
-
-  guardarAjustes() {
-    localStorage.setItem('ajustes', JSON.stringify(this.ajustes));
+  constructor(@Inject(DOCUMENT) private _document: Document) {
+    this.loadSettings();
   }
 
-  cargarAjustes() {
-    if (localStorage.getItem('ajustes')) {
-      this.ajustes = JSON.parse(localStorage.getItem('ajustes') ?? '');
+  saveSettings() {
+    localStorage.setItem('settings', JSON.stringify(this.settings));
+  }
+
+  loadSettings() {
+    if (localStorage.getItem('settings')) {
+      this.settings = JSON.parse(localStorage.getItem('settings') ?? '');
     }
-    this.aplicarTema(this.ajustes.tema, this.ajustes.temaUrl);
+    this.applytheme(this.settings.theme, this.settings.themeUrl);
   }
 
-  aplicarTema(tema: string, url: string) {
-    this._document.getElementById('tema')?.setAttribute('href', url);
-    this.ajustes.tema = tema;
-    this.ajustes.temaUrl = url;
-    this.guardarAjustes();
+  applytheme(theme: string, url: string) {
+    this._document.querySelector('#theme')?.setAttribute('href', url);
+    this.settings.theme = theme;
+    this.settings.themeUrl = url;
+    this.saveSettings();
   }
 
-  aplicarCheck( link: any ) {
-    const selectores: any = this._document.getElementsByClassName('selector');
-    for (const ref of selectores) {
+  applyCheck(link: any) {
+    const selectors: any = this._document.getElementsByClassName('selector');
+    for (const ref of selectors) {
       ref.classList.remove('working');
     }
     link.classList.add('working');
   }
 
-  iniciarCheck() {
-    const selectores: any = this._document.getElementsByClassName('selector');
-    for (const ref of selectores) {
-      if (ref.getAttribute('data-theme') === this.ajustes.tema) {
+  startCheck() {
+    const selectors: any = this._document.getElementsByClassName('selector');
+    for (const ref of selectors) {
+      if (ref.getAttribute('data-theme') === this.settings.theme) {
         ref.classList.add('working');
         break;
       }
@@ -54,7 +49,7 @@ export class SettingsService {
   }
 }
 
-interface Ajustes {
-  temaUrl: string;
-  tema: string;
+interface Setting {
+  themeUrl: string;
+  theme: string;
 }

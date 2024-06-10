@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ServiceModule } from '../../services/service.module';
 import { User } from '../../models/user.model';
 import { Medic } from '../../models/medic.model';
 import { Hospital } from '../../models/hospital.model';
 import { EntityType } from '../../models/types/entity.type';
 import { Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: ServiceModule,
-})
+@Injectable()
 export class ModalUploadService {
   public notification = new Subject<any>();
   private _type!: EntityType | null;

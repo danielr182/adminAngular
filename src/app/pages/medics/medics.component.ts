@@ -11,7 +11,7 @@ import { Hospital } from '../../models/hospital.model';
 @Component({
   selector: 'app-medics',
   templateUrl: './medics.component.html',
-  styles: [],
+  styleUrl: './medics.component.scss',
 })
 export class MedicsComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;

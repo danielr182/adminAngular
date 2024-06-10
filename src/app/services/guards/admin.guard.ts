@@ -1,13 +1,15 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { UserService } from '../user/user.service';
 
-export const AdminGuard: CanActivateFn = () => {
+export const adminGuard: CanActivateFn = () => {
   const _userService = inject(UserService);
+  const router = inject(Router);
+
   if (_userService.user?.role === 'ADMIN_ROLE') {
     return true;
   } else {
-    _userService.logOut();
+    router.navigateByUrl('/dashboard');
     return false;
   }
 };

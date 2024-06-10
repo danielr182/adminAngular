@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 
-import { ServiceModule } from '../service.module';
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { Hospital } from '../../models/hospital.model';
 import Swal from 'sweetalert2';
@@ -12,9 +11,7 @@ import { HospitalApi } from '../../models/api/hospital-api.model';
 import { SearchApi } from '../../models/api/search-api.model';
 import { HospitalPaginationApi } from '../../models/api/pagination-api.model';
 
-@Injectable({
-  providedIn: ServiceModule,
-})
+@Injectable()
 export class HospitalService {
   hospitalUrl = environment.base_url + '/hospital';
 

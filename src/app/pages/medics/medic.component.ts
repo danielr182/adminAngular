@@ -27,17 +27,16 @@ export class MedicComponent implements OnInit, OnDestroy {
     public _activatedRoute: ActivatedRoute,
     public _modalUploadService: ModalUploadService,
     private fb: FormBuilder
-  ) {
+  ) {}
+
+  ngOnInit() {
+    this.createForm();
     this._activatedRoute.params.subscribe((params) => {
       const id = params['id'];
       if (id !== 'new') {
         this.loadMedic(id);
       }
     });
-  }
-
-  ngOnInit() {
-    this.createForm();
     this.subscriptions.add(
       this._hospitalService.loadHospitals(0, -1).subscribe((resp) => {
         this.hospitals = resp.hospitals;
@@ -60,13 +59,19 @@ export class MedicComponent implements OnInit, OnDestroy {
   }
 
   loadMedic(id: string): void {
-    this._medicService.getMedicById(id).subscribe((medic) => {
-      this.medic = medic;
-      this.selectedHospital = <Hospital>medic.hospital;
-      this.form.setValue({
-        hospital: this.selectedHospital.uid,
-        name: this.medic?.name,
-      });
+    this._medicService.getMedicById(id).subscribe({
+      next: (medic) => {
+        this.medic = medic;
+        this.selectedHospital = <Hospital>medic.hospital;
+        this.form.setValue({
+          hospital: this.selectedHospital.uid,
+          name: this.medic?.name,
+        });
+      },
+      error: (err) => {
+        console.log(err.error);
+        this._router.navigateByUrl('/medics');
+      },
     });
   }
 

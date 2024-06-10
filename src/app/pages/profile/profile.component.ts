@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../../models/user.model';
-import { UserService } from '../../services/service.index';
+import { FileUploadService, UserService } from '../../services/service.index';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,7 +15,11 @@ export class ProfileComponent implements OnInit {
   imageToUpload!: File | null;
   user: User | null;
 
-  constructor(public _userService: UserService, private fb: FormBuilder) {
+  constructor(
+    public _userService: UserService,
+    private _fileUploadService: FileUploadService,
+    private fb: FormBuilder
+  ) {
     this.user = _userService.user;
   }
 
@@ -55,7 +59,7 @@ export class ProfileComponent implements OnInit {
   updateImage(): void {
     if (!this.imageToUpload) return;
 
-    this._userService.updateImage(this.imageToUpload, this.user?.uid || '');
+    this._fileUploadService.updateImage(this.imageToUpload, this.user?.uid || '');
   }
 
   private createForm(): void {

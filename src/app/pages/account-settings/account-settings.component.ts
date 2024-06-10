@@ -8,16 +8,16 @@ import { SettingsService } from '../../services/service.index';
 })
 export class AccountSettingsComponent implements OnInit {
 
-  constructor(private _ajustes: SettingsService) { }
+  constructor(private _settingsService: SettingsService) { }
 
   ngOnInit() {
-    this._ajustes.iniciarCheck();
+    this._settingsService.startCheck();
   }
 
-  cambiarTema( tema: string, link: any) {
-    const url = `assets/css/colors/${ tema }.css`;
-    this._ajustes.aplicarCheck( link );
-    this._ajustes.aplicarTema(tema, url);
+  changeTheme( theme: string, link: any) {
+    const url = `assets/css/colors/${ theme }.css`;
+    this._settingsService.applyCheck( link );
+    this._settingsService.applytheme(theme, url);
   }
 
 }

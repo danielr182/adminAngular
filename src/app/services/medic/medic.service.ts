@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { ServiceModule } from '../service.module';
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { Medic } from '../../models/medic.model';
 import { UserService } from '../user/user.service';
@@ -12,9 +11,7 @@ import { MedicPaginationApi } from '../../models/api/pagination-api.model';
 import { SearchApi } from '../../models/api/search-api.model';
 import { MedicApi } from '../../models/api/medic-api.model';
 
-@Injectable({
-  providedIn: ServiceModule,
-})
+@Injectable()
 export class MedicService {
   medicUrl = environment.base_url + '/medic';
 
@@ -36,8 +33,8 @@ export class MedicService {
     };
   }
 
-  loadMedics(from: number = 0): Observable<MedicPaginationApi> {
-    const url = `${this.medicUrl}?from=${from}`;
+  loadMedics(from: number = 0, limit: number = 0): Observable<MedicPaginationApi> {
+    const url = `${this.medicUrl}?from=${from}&limit=${limit}`;
     return this._http.get<MedicPaginationApi>(url, this.headers);
   }
 

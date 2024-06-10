@@ -64,14 +64,14 @@
               type="text"
               (keyup.enter)="search(input.value)"
               class="form-control"
-              placeholder="Buscar y enter" />
+              placeholder="Search" />
             <a class="srh-btn"><i class="ti-close"></i></a>
           </div>
         </li>
         <!-- ============================================================== -->
         <!-- Messages -->
         <!-- ============================================================== -->
-        <li class="nav-item dropdown">
+        <!-- <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle waves-effect waves-dark"
             href=""
@@ -92,7 +92,6 @@
               </li>
               <li>
                 <div class="message-center">
-                  <!-- Message -->
                   <a href="#">
                     <div class="user-img">
                       <img src="../assets/images/users/1.jpg" alt="user" class="img-circle" />
@@ -104,7 +103,6 @@
                       <span class="time">9:30 AM</span>
                     </div>
                   </a>
-                  <!-- Message -->
                   <a href="#">
                     <div class="user-img">
                       <img src="../assets/images/users/2.jpg" alt="user" class="img-circle" />
@@ -116,7 +114,6 @@
                       <span class="time">9:10 AM</span>
                     </div>
                   </a>
-                  <!-- Message -->
                   <a href="#">
                     <div class="user-img">
                       <img src="../assets/images/users/3.jpg" alt="user" class="img-circle" />
@@ -128,7 +125,6 @@
                       <span class="time">9:08 AM</span>
                     </div>
                   </a>
-                  <!-- Message -->
                   <a href="#">
                     <div class="user-img">
                       <img src="../assets/images/users/4.jpg" alt="user" class="img-circle" />
@@ -150,14 +146,14 @@
               </li>
             </ul>
           </div>
-        </li>
+        </li> -->
         <!-- ============================================================== -->
         <!-- End Messages -->
         <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- Language -->
         <!-- ============================================================== -->
-        <li class="nav-item dropdown">
+        <!-- <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle waves-effect waves-dark"
             href=""
@@ -168,23 +164,11 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right animated fadeIn">
             <a class="dropdown-item" href="#">
-              <i class="flag-icon flag-icon-in"></i>
-              India
-            </a>
-            <a class="dropdown-item" href="#">
-              <i class="flag-icon flag-icon-fr"></i>
-              French
-            </a>
-            <a class="dropdown-item" href="#">
-              <i class="flag-icon flag-icon-cn"></i>
-              China
-            </a>
-            <a class="dropdown-item" href="#">
-              <i class="flag-icon flag-icon-de"></i>
-              Dutch
+              <i class="flag-icon flag-icon-es"></i>
+              Spanish
             </a>
           </div>
-        </li>
+        </li> -->
         <!-- ============================================================== -->
         <!-- Profile -->
         <!-- ============================================================== -->
@@ -216,23 +200,11 @@
                   My Profile
                 </a>
               </li>
-              <li>
-                <a href="#">
-                  <i class="ti-wallet"></i>
-                  My Balance
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="ti-email"></i>
-                  Inbox
-                </a>
-              </li>
               <li role="separator" class="divider"></li>
               <li>
-                <a href="#">
+                <a routerLink="/account-settings">
                   <i class="ti-settings"></i>
-                  Account Setting
+                  Account Settings
                 </a>
               </li>
               <li role="separator" class="divider"></li>

@@ -2,20 +2,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 
-// Componentes
+// Components
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/login/register.component';
 import { NopagefoundComponent } from './components/nopagefound/nopagefound.component';
 
-// Rutas
+// Routes
 import { AppRoutingModule } from './app-routing.module';
 
-// Módulos
-import { PagesModule } from './pages/pages.module';
-import { ServiceModule } from './services/service.module';
+// Modules
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -27,14 +25,10 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
   ],
   imports: [
     BrowserModule,
-    PagesModule,
-    ServiceModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
-  ],
-  providers: [
-    provideCharts(withDefaultRegisterables())
+    AppRoutingModule,
   ],
   bootstrap: [AppComponent]
 })

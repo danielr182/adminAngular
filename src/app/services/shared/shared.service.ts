@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ServiceModule } from '../service.module';
 
 
-@Injectable({
-  providedIn: ServiceModule
-})
+@Injectable()
 export class SharedService {
 
   constructor() { }

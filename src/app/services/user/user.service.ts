@@ -3,27 +3,26 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
-import { ServiceModule } from '../service.module';
 import { map, catchError, tap } from 'rxjs/operators';
 import { User } from '../../models/user.model';
-import { FileUploadService } from '../file-upload/file-upload.service';
 import { Observable, of } from 'rxjs';
 import { LoginApi } from '../../models/api/login-api.model';
 import { environment } from '../../../environments/environment';
 import { SearchApi } from '../../models/api/search-api.model';
 import { UserPaginationApi } from '../../models/api/pagination-api.model';
+import { IMenu } from '../../models/menu';
 
 declare const google: any;
 
 @Injectable({
-  providedIn: ServiceModule,
+  providedIn: 'root',
 })
 export class UserService {
   user!: User | null;
-  menu!: any[];
+  menu!: IMenu[];
   userUrl = environment.base_url + '/user';
 
-  constructor(public _http: HttpClient, public router: Router, public _fileUploadService: FileUploadService) {
+  constructor(public _http: HttpClient, public router: Router) {
     this.loadLocalStorage();
   }
 
@@ -51,7 +50,7 @@ export class UserService {
     }
   }
 
-  saveOnLocalStorage(token: string, user: User, menu: any[]): void {
+  saveOnLocalStorage(token: string, user: User, menu: IMenu[]): void {
     localStorage.setItem('id', user.uid ?? '');
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
@@ -66,7 +65,7 @@ export class UserService {
 
     return this._http.post<LoginApi>(url, user).pipe(
       tap((resp) => {
-        this.saveOnLocalStorage(resp.token, resp.user, []);
+        this.saveOnLocalStorage(resp.token, resp.user, resp.menu);
       }),
       catchError((err) => {
         Swal.fire('Login error', err.error.message, 'error');
@@ -79,7 +78,7 @@ export class UserService {
     const url = environment.base_url + '/login/google';
     return this._http.post<LoginApi>(url, { token }).pipe(
       map((resp) => {
-        this.saveOnLocalStorage(resp.token, resp.user, []);
+        this.saveOnLocalStorage(resp.token, resp.user, resp.menu);
       })
     );
   }
@@ -102,7 +101,7 @@ export class UserService {
   createUser(user: User): Observable<User> {
     return this._http.post<LoginApi>(this.userUrl, user).pipe(
       map((resp) => {
-        this.saveOnLocalStorage(resp.token, resp.user, []);
+        this.saveOnLocalStorage(resp.token, resp.user, resp.menu);
         Swal.fire('User created', user.email, 'success');
         return resp.user;
       }),
@@ -133,8 +132,8 @@ export class UserService {
       );
   }
 
-  loadUsers(from: number = 0): Observable<UserPaginationApi> {
-    const url = `${this.userUrl}?from=${from}`;
+  loadUsers(from: number = 0, limit: number = 0): Observable<UserPaginationApi> {
+    const url = `${this.userUrl}?from=${from}&limit=${limit}`;
     return this._http
       .get<UserPaginationApi>(url, this.headers)
       .pipe(
@@ -173,22 +172,6 @@ export class UserService {
     );
   }
 
-  updateImage(file: File, id: string): void {
-    this._fileUploadService
-      .uploadFile(file, 'users', id)
-      .then((resp: any) => {
-        if (!resp.ok) throw resp;
-        if (!this.user) return;
-
-        this.user.img = resp.user.img;
-        Swal.fire('Updated image', this.user?.name, 'success');
-        this.saveOnLocalStorage(this.token, resp.user, this.menu);
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire('Error', 'Error uploading the image.', 'error');
-      });
-  }
 
   validateToken(): Observable<boolean> {
     const url = environment.base_url + '/login/renew';
@@ -197,9 +180,7 @@ export class UserService {
       .get<LoginApi>(url, this.headers)
       .pipe(
         map((resp) => {
-          localStorage.setItem('token', resp.token);
-          localStorage.setItem('user', JSON.stringify(resp.user));
-          this.user = new User(resp.user);
+          this.saveOnLocalStorage(resp.token, resp.user, resp.menu);
           return true;
         }),
         catchError(() => of(false))

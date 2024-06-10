@@ -1,0 +1,9 @@
+<div class="graphic animated fadeIn">
+  @for (graph of graphics; track $index) {
+    <div class="card">
+      <div class="card-body">
+        <app-donut [charConfig]="graph.config" [legend]="graph.legend"></app-donut>
+      </div>
+    </div>
+  }
+</div>

@@ -26,10 +26,15 @@
 }@else {
 <div class="row animated fadeIn">
   <div class="col-12">
-    <div class="card container-fluid">
+    <div class="card container-fluid overflow-auto">
       <div class="card-body">
-        <div class="row">
-          <div class="col-12">
+        <div class="row justify-content-between m-b-30">
+          <h3 class="card-title">
+            Registered Medics (
+            <small>{{ totalRows }}</small>
+            )
+          </h3>
+          <div class="">
             <button
               [routerLink]="['/medic', 'new']"
               class="btn waves-effect waves-light btn-rounded btn-primary float-right">
@@ -38,11 +43,6 @@
             </button>
           </div>
         </div>
-        <h3 class="card-title">
-          Registered Medics (
-          <small>{{ totalRows }}</small>
-          )
-        </h3>
         <table class="table table-hover">
           <thead>
             <tr>
@@ -61,9 +61,9 @@
                   [src]="medic.img | image : 'medics'"
                   class="img-50 img-circle pointer" />
               </td>
-              <td class="align-content-center">{{ medic.name }}</td>
-              <td class="align-content-center">{{ getHospitalName(medic.hospital) }}</td>
-              <td>
+              <td class="text-field align-content-center">{{ medic.name }}</td>
+              <td class="text-field align-content-center">{{ getHospitalName(medic.hospital) }}</td>
+              <td class="button-wrapper">
                 <button [routerLink]="['/medic', medic.uid]" class="btn btn-primary m-r-10">
                   <i class="fa fa-edit"></i>
                 </button>

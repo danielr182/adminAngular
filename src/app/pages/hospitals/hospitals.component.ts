@@ -9,7 +9,7 @@ import { autocomplete } from '../../shared/utils/autocomplete';
 @Component({
   selector: 'app-hospitals',
   templateUrl: './hospitals.component.html',
-  styles: [],
+  styleUrl: './hospitals.component.scss',
 })
 export class HospitalsComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;

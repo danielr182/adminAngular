@@ -27,7 +27,7 @@
 } @else {
 <div class="row animated fadeIn">
   <div class="col-12">
-    <div class="card container-fluid">
+    <div class="card container-fluid overflow-auto">
       <div class="card-body">
         <h3 class="card-title">
           Registered users (
@@ -58,7 +58,7 @@
               <td class="align-content-center">{{ user.email }}</td>
               <td class="align-content-center">{{ user.name }}</td>
               <td class="align-content-center">
-                <select [(ngModel)]="user.role" name="role" class="form-control" (change)="updateUser(user)">
+                <select [(ngModel)]="user.role" name="role" class="form-control min-w120" (change)="updateUser(user)">
                   <option value="ADMIN_ROLE">Admin</option>
                   <option value="USER_ROLE">User</option>
                 </select>
