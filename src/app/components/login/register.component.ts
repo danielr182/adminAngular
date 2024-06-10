@@ -64,13 +64,5 @@ export class RegisterComponent implements OnInit {
       },
       { validators: this.areEqual('password', 'password2') }
     );
-
-    this.form.setValue({
-      name: 'test1',
-      email: 'test1@mail.com',
-      password: '123456',
-      password2: '123456',
-      conditions: true,
-    });
   }
 }
