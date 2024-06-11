@@ -2,6 +2,11 @@
   cursor: pointer;
 }
 
+.show-preloader {
+  display: block !important;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 .pointer {
   cursor: pointer;
 }

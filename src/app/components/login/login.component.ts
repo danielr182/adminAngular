@@ -46,7 +46,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   handleCredentialResponse(response: any): void {
-    this._userService.loginGoogle(response.credential).subscribe(() => this._router.navigateByUrl('/'));
+    document.querySelector('div.preloader')?.classList.add('show-preloader');
+    this._userService.loginGoogle(response.credential).subscribe({
+      next: () => this._router.navigateByUrl('/'),
+      error: () => document.querySelector('div.preloader')?.classList.remove('show-preloader'),
+    });
   }
 
   login() {
@@ -57,7 +61,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
     const { email, password } = this.form.value;
     const user = new User({ name: '', email, password });
 
-    this._userService.login(user, this.form.value.rememberMe).subscribe(() => this._router.navigateByUrl('/'));
+    document.querySelector('div.preloader')?.classList.add('show-preloader');
+    this._userService.login(user, this.form.value.rememberMe).subscribe({
+      next: () => this._router.navigateByUrl('/'),
+      error: () => document.querySelector('div.preloader')?.classList.remove('show-preloader'),
+    });
   }
 
   private createForm(): void {
