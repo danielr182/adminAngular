@@ -82,7 +82,7 @@ export class GraphicsComponent implements OnInit {
     const chartConfig = {
       config: {
         data: {
-          datasets: [{ data: [googleUsers, noGoogleUsers], backgroundColor: ['#FF9EAA', '#F9F9E0'] }],
+          datasets: [{ data: [googleUsers, noGoogleUsers], backgroundColor: ['#7360DF', '#F2AFEF'] }],
           labels: ['Google User', 'Non-google user'],
         },
         type: <ChartType>'doughnut',
